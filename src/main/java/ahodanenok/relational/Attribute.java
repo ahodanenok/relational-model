@@ -1,8 +1,12 @@
 package ahodanenok.relational;
 
+import java.util.Objects;
+
 /**
  * Definition of a single attribute.
+ *
  * Attribute is a pair (A, T) where A - name and T - type of an attribute.
+ * Names are case-sensitive and returned as is, except leading and trailing whitespaces trimmed.
  */
 public final class Attribute {
 
@@ -10,8 +14,14 @@ public final class Attribute {
     private final Class<?> type;
 
     public Attribute(String name, Class<?> type) {
-        // todo: name not null or empty
-        // todo: type is not null
+        Objects.requireNonNull(name, "name can't be null");
+        Objects.requireNonNull(type, "type can't be null");
+
+        name = name.trim();
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("name can't be empty");
+        }
+
         this.name = name;
         this.type = type;
     }
