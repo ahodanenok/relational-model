@@ -52,6 +52,26 @@ public final class TupleSchema {
         return attributes;
     }
 
-    // todo: equals
-    // todo: hashCode
+    @Override
+    public int hashCode() {
+        return attributes.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (!this.getClass().equals(obj.getClass())) {
+            return false;
+        }
+
+        TupleSchema other = (TupleSchema) obj;
+        return attributes.equals(other.attributes);
+    }
 }
