@@ -128,4 +128,27 @@ public class TupleSchemaTest {
         assertNotEquals(schemaA, schemaB);
         assertNotEquals(schemaB, schemaA);
     }
+
+    @Test
+    public void shouldTrimAttributeNameDuringLookup() {
+        TupleSchema schema = new TupleSchemaGenerator().withAttribute("phone", String.class).generate();
+        assertEquals(new Attribute("phone", String.class), schema.getAttribute("\n  phone \t"));
+    }
+
+    @Test
+    public void shouldThrowErrorIfAttributeNameToLookupIsNull() {
+        TupleSchema schema = new TupleSchemaGenerator().withAttribute("123", boolean.class).generate();
+
+        NullPointerException e = assertThrows(NullPointerException.class, () -> schema.getAttribute(null));
+        assertEquals("name can't be null", e.getMessage());
+    }
+
+    @Test
+    public void shouldThrowErrorIfAttributeNotFound() {
+        TupleSchema schema = new TupleSchemaGenerator().withAttribute("123", boolean.class).generate();
+
+        AttributeNotFoundException e = assertThrows(AttributeNotFoundException.class, () -> schema.getAttribute("abc"));
+        assertEquals("Attribute 'abc' not found", e.getMessage());
+        assertEquals("abc", e.getName());
+    }
 }

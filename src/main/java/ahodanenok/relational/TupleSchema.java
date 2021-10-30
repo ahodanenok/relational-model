@@ -1,6 +1,7 @@
 package ahodanenok.relational;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -29,24 +30,25 @@ public final class TupleSchema {
     /**
      * Get attribute with the given name.
      *
-     * @param name attribute name, case-insensitive
-     * @throws ??? if attribute not found
-     * @throws ??? if attribute is null
-     * @throws ??? if attribute is empty
+     * @param name attribute name, case-sensitive with leading and trailing whitespaces trimmed
+     * @throws AttributeNotFoundException if attribute wasn't found
+     * @throws NullPointerException if attribute is null
      */
     public Attribute getAttribute(String name) {
-        // todo: not null and not empty
-        // todo: case-insensitive search
+        Objects.requireNonNull(name, "name can't be null");
+
+        String lookupName = name.trim();
         return attributes.stream()
-                .filter(it -> it.getName().equals(name))
+                .filter(it -> it.getName().equals(lookupName))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("todo: attribute not found exception"));
+                .orElseThrow(() -> new AttributeNotFoundException(lookupName));
     }
 
     /**
      * Get all attributes in the schema.
      *
      * @return unmodifiable set of attributes without any particular order, empty list for 0-tuple
+     * todo: expose only iterator instead of set of attributes?
      */
     public Set<Attribute> getAttributes() {
         return attributes;
