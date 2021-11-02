@@ -1,5 +1,6 @@
 package ahodanenok.relational;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -15,12 +16,21 @@ import java.util.Set;
  */
 public final class Tuple {
 
+    public static final Tuple EMPTY = new Tuple(TupleSchema.EMPTY, Collections.emptyMap());
+
     private final TupleSchema schema;
     private final Map<String, Object> values;
 
     Tuple(TupleSchema schema, Map<String, Object> values) {
         this.schema = schema;
         this.values = values;
+    }
+
+    /**
+     * Get schema of the tuple.
+     */
+    public TupleSchema schema() {
+        return schema;
     }
 
     /**

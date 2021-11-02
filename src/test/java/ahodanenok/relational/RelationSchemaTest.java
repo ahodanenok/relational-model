@@ -1,5 +1,6 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.AttributeNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

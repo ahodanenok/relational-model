@@ -1,5 +1,7 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.AttributeNotFoundException;
+
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -13,6 +15,8 @@ import java.util.Set;
  * It's is also possible that schema can be an empty set (0-tuple)
  */
 public final class TupleSchema {
+
+    public static final TupleSchema EMPTY = new TupleSchema(Collections.emptySet());
 
     private final Set<Attribute> attributes;
 

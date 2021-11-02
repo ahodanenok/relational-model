@@ -1,11 +1,16 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.AttributeNotFoundException;
+
+import java.util.Collections;
 import java.util.Set;
 
 /**
  * Description of a relation.
  */
 public final class RelationSchema {
+
+    public static RelationSchema EMPTY = new RelationSchema(new TupleSchema(Collections.emptySet()));
 
     private final TupleSchema schema;
 

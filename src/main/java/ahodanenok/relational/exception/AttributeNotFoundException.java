@@ -1,9 +1,9 @@
-package ahodanenok.relational;
+package ahodanenok.relational.exception;
 
 /**
  * Thrown if during attribute lookup by its name it wasn't found.
  */
-public class AttributeNotFoundException extends RuntimeException {
+public final class AttributeNotFoundException extends RuntimeException {
 
     private final String name;
 
