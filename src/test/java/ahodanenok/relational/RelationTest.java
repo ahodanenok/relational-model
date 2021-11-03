@@ -17,6 +17,7 @@ public class RelationTest {
         assertEquals(1, relation.cardinality());
         assertEquals(1, relation.tuples().count());
         assertEquals(Tuple.EMPTY, relation.tuples().findFirst().orElse(null));
+        assertFalse(relation.isEmpty());
     }
 
     @Test
@@ -26,6 +27,7 @@ public class RelationTest {
         assertEquals(0, relation.degree());
         assertEquals(0, relation.cardinality());
         assertEquals(0, relation.tuples().count());
+        assertTrue(relation.isEmpty());
     }
 
     @Test
@@ -36,6 +38,7 @@ public class RelationTest {
         assertEquals(1, relation.degree());
         assertEquals(0, relation.cardinality());
         assertEquals(0, relation.tuples().count());
+        assertTrue(relation.isEmpty());
     }
 
     @Test
@@ -58,6 +61,7 @@ public class RelationTest {
         assertEquals(1, relation.tuples().count());
         assertEquals(tuple, relation.tuples().findFirst().orElse(null));
         assertEquals(tuple, relation.getSingleTuple());
+        assertFalse(relation.isEmpty());
 
         RelationSchema expectedSchema = new RelationSchemaGenerator()
                 .withAttribute("name", String.class)
@@ -88,6 +92,7 @@ public class RelationTest {
         assertEquals(schema, relation.schema());
         assertEquals(tuple, relation.tuples().findFirst().orElse(null));
         assertEquals(tuple, relation.getSingleTuple());
+        assertFalse(relation.isEmpty());
     }
 
     @Test

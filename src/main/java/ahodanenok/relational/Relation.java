@@ -40,6 +40,10 @@ public final class Relation {
         return tuples.size();
     }
 
+    public boolean isEmpty() {
+        return cardinality() == 0;
+    }
+
     /**
      * Extract a single tuple from the relation.
      *
