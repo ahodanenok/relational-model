@@ -9,6 +9,8 @@ import java.util.stream.Stream;
  */
 public final class Relation {
 
+    public static final Relation EMPTY = new Relation(RelationSchema.EMPTY, Collections.emptySet());
+
     private final RelationSchema schema;
     private final Set<Tuple> tuples;
 
@@ -58,6 +60,26 @@ public final class Relation {
      */
     public Stream<Tuple> tuples() {
         return tuples.stream();
+    }
+
+    /**
+     * Check if the relation is superset of the given relation.
+     */
+    public boolean isSupersetOf(Relation relation) {
+        return isSupersetOf(relation, false);
+    }
+
+    /**
+     * Check if the relation is superset of the given relation.
+     * @param proper check if proper superset
+     */
+    public boolean isSupersetOf(Relation relation, boolean proper) {
+        boolean superset = tuples.containsAll(relation.tuples);
+        if (proper) {
+            return superset && cardinality() > relation.cardinality();
+        } else {
+            return superset;
+        }
     }
 
     @Override

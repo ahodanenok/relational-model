@@ -295,4 +295,86 @@ public class RelationTest {
         assertNotEquals(relationA, relationB);
         assertNotEquals(relationB, relationA);
     }
+
+    @Test
+    public void testSubsetForEqualRelations() {
+        Relation relationA = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+        Relation relationB = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+
+        assertTrue(relationA.isSupersetOf(relationB));
+        assertTrue(relationB.isSupersetOf(relationA));
+        assertFalse(relationA.isSupersetOf(relationB, true));
+        assertFalse(relationB.isSupersetOf(relationA, true));
+    }
+
+    @Test
+    public void testSubsetForEmptyRelations() {
+        Relation nonEmpty = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .select();
+
+        assertTrue(Relation.EMPTY.isSupersetOf(Relation.EMPTY));
+        assertFalse(Relation.EMPTY.isSupersetOf(Relation.EMPTY, true));
+        assertFalse(Relation.EMPTY.isSupersetOf(nonEmpty));
+        assertTrue(nonEmpty.isSupersetOf(Relation.EMPTY));
+        assertTrue(nonEmpty.isSupersetOf(Relation.EMPTY, true));
+    }
+
+    @Test
+    public void testSupersetForRelationsWithDifferentCardinalities() {
+        Relation relationA = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .addTuple(new TupleSelector().withValue("a", "4").withValue("b", 44).select())
+                .select();
+        Relation relationB = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+        Relation relationC = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .addTuple(new TupleSelector().withValue("a", "5").withValue("b", 55).select())
+                .select();
+
+        assertTrue(relationA.isSupersetOf(relationB, false));
+        assertTrue(relationA.isSupersetOf(relationB, true));
+        assertFalse(relationA.isSupersetOf(relationC, false));
+        assertFalse(relationA.isSupersetOf(relationC, true));
+        assertFalse(relationB.isSupersetOf(relationA, false));
+        assertFalse(relationB.isSupersetOf(relationA, true));
+        assertFalse(relationB.isSupersetOf(relationC, false));
+        assertFalse(relationB.isSupersetOf(relationC, true));
+        assertFalse(relationC.isSupersetOf(relationA, false));
+        assertFalse(relationC.isSupersetOf(relationA, true));
+        assertTrue(relationC.isSupersetOf(relationB, false));
+        assertTrue(relationC.isSupersetOf(relationB, true));
+    }
+
+    @Test
+    public void shouldNotBeSupersetWhenRelationSchemasDifferent() {
+        Relation relationA = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+        Relation relationB = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("c", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("c", 22).select())
+                .select();
+
+        assertFalse(relationA.isSupersetOf(relationB, false));
+        assertFalse(relationA.isSupersetOf(relationB, true));
+    }
 }
