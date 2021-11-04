@@ -1,6 +1,7 @@
 package ahodanenok.relational;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -78,12 +79,29 @@ public final class Relation {
      * @param proper check if proper superset
      */
     public boolean isSupersetOf(Relation relation, boolean proper) {
+        Objects.requireNonNull(relation, "Relation can't be null");
         boolean superset = tuples.containsAll(relation.tuples);
         if (proper) {
             return superset && cardinality() > relation.cardinality();
         } else {
             return superset;
         }
+    }
+
+    /**
+     * Check if the relation is subset of the given relation
+     */
+    public boolean isSubsetOf(Relation relation) {
+        return isSubsetOf(relation, false);
+    }
+
+    /**
+     * Check if the relation is subset of the given relation
+     * @param proper check if proper subset
+     */
+    public boolean isSubsetOf(Relation relation, boolean proper) {
+        Objects.requireNonNull(relation, "Relation can't be null");
+        return relation.isSupersetOf(this, proper);
     }
 
     @Override

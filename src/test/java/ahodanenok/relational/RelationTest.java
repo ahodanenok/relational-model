@@ -302,7 +302,7 @@ public class RelationTest {
     }
 
     @Test
-    public void testSubsetForEqualRelations() {
+    public void testSupersetForEqualRelations() {
         Relation relationA = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
@@ -321,7 +321,7 @@ public class RelationTest {
     }
 
     @Test
-    public void testSubsetForEmptyRelations() {
+    public void testSupersetForEmptyRelations() {
         Relation nonEmpty = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
                 .select();
@@ -381,5 +381,87 @@ public class RelationTest {
 
         assertFalse(relationA.isSupersetOf(relationB, false));
         assertFalse(relationA.isSupersetOf(relationB, true));
+    }
+
+    @Test
+    public void testSubsetForEqualRelations() {
+        Relation relationA = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+        Relation relationB = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+
+        assertTrue(relationA.isSubsetOf(relationB));
+        assertTrue(relationB.isSubsetOf(relationA));
+        assertFalse(relationA.isSubsetOf(relationB, true));
+        assertFalse(relationB.isSubsetOf(relationA, true));
+    }
+
+    @Test
+    public void testSubsetForEmptyRelations() {
+        Relation nonEmpty = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .select();
+
+        assertTrue(Relation.EMPTY.isSubsetOf(Relation.EMPTY));
+        assertFalse(Relation.EMPTY.isSubsetOf(Relation.EMPTY, true));
+        assertTrue(Relation.EMPTY.isSubsetOf(nonEmpty));
+        assertFalse(nonEmpty.isSubsetOf(Relation.EMPTY));
+        assertFalse(nonEmpty.isSubsetOf(Relation.EMPTY, true));
+    }
+
+    @Test
+    public void testSubsetForRelationsWithDifferentCardinalities() {
+        Relation relationA = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .addTuple(new TupleSelector().withValue("a", "4").withValue("b", 44).select())
+                .select();
+        Relation relationB = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+        Relation relationC = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .addTuple(new TupleSelector().withValue("a", "5").withValue("b", 55).select())
+                .select();
+
+        assertFalse(relationA.isSubsetOf(relationB, false));
+        assertFalse(relationA.isSubsetOf(relationB, true));
+        assertFalse(relationA.isSubsetOf(relationC, false));
+        assertFalse(relationA.isSubsetOf(relationC, true));
+        assertTrue(relationB.isSubsetOf(relationA, false));
+        assertTrue(relationB.isSubsetOf(relationA, true));
+        assertTrue(relationB.isSubsetOf(relationC, false));
+        assertTrue(relationB.isSubsetOf(relationC, true));
+        assertFalse(relationC.isSubsetOf(relationA, false));
+        assertFalse(relationC.isSubsetOf(relationA, true));
+        assertFalse(relationC.isSubsetOf(relationB, false));
+        assertFalse(relationC.isSubsetOf(relationB, true));
+    }
+
+    @Test
+    public void shouldNotBeSubsetWhenRelationSchemasDifferent() {
+        Relation relationA = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", 22).select())
+                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", 33).select())
+                .select();
+        Relation relationB = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("a", "1").withValue("c", 11).select())
+                .addTuple(new TupleSelector().withValue("a", "2").withValue("c", 22).select())
+                .select();
+
+        assertFalse(relationA.isSubsetOf(relationB, false));
+        assertFalse(relationA.isSubsetOf(relationB, true));
     }
 }
