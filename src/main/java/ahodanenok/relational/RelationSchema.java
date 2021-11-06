@@ -28,12 +28,20 @@ public final class RelationSchema {
     /**
      * Get attribute with the given name.
      *
-     * @param name attribute name, case-sensitive with leading and trailing whitespaces trimmed
+     * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
      * @throws AttributeNotFoundException if attribute wasn't found
      * @throws NullPointerException if attribute is null
      */
     public Attribute getAttribute(String name) {
         return schema.getAttribute(name);
+    }
+
+    /**
+     * Check if attribute with the given name exists in the schema.
+     * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
+     */
+    public boolean hasAttribute(String name) {
+        return schema.hasAttribute(name);
     }
 
     /**
