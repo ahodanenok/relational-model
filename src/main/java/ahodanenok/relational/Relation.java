@@ -68,6 +68,13 @@ public final class Relation {
     }
 
     /**
+     * Check if tuple is present in the relation.
+     */
+    public boolean contains(Tuple tuple) {
+        return tuples.contains(tuple);
+    }
+
+    /**
      * Check if the relation is superset of the given relation.
      */
     public boolean isSupersetOf(Relation relation) {
