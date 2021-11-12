@@ -8,12 +8,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Description of tuple attributes.
- *
- * Tuple schema consists of an unordered set of pairs (A, T),
- * where A is an attribute name and T - attribute type.
- *
- * It's is also possible that schema can be an empty set (0-tuple)
+ * Set of attributes in a particular tuple.
+ * This set is not ordered, so the only way to referer to some attribute is by its name.
  */
 public final class TupleSchema {
 
@@ -37,7 +33,7 @@ public final class TupleSchema {
      *
      * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
      * @throws AttributeNotFoundException if attribute wasn't found
-     * @throws NullPointerException if attribute is null
+     * @throws NullPointerException if attribute name is null
      */
     public Attribute getAttribute(String name) {
         Objects.requireNonNull(name, "name can't be null");
@@ -46,6 +42,7 @@ public final class TupleSchema {
 
     /**
      * Check if attribute with the given name exists in the schema.
+     *
      * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
      */
     public boolean hasAttribute(String name) {
