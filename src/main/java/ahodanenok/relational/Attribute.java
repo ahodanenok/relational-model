@@ -3,10 +3,8 @@ package ahodanenok.relational;
 import java.util.Objects;
 
 /**
- * Definition of a single attribute.
- *
- * Attribute is a pair (A, T) where A - name and T - type of an attribute.
- * Names are case-sensitive and returned as is, except leading and trailing whitespaces trimmed.
+ * Label for a domain (type) used in a relation/tuple.
+ * Attribute names are case-sensitive and returned as is, except leading and trailing whitespaces are trimmed.
  */
 public final class Attribute {
 
