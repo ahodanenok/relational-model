@@ -29,17 +29,14 @@ public class AttributeTest {
 
     @Test
     public void shouldThrowErrorIfNameIsNotValid() {
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new Attribute(null, String.class));
-        assertEquals("name can't be null", e1.getMessage());
-
-        IllegalArgumentException e2 = assertThrows(IllegalArgumentException.class, () -> new Attribute("   ", String.class));
-        assertEquals("name can't be empty", e2.getMessage());
+        NullPointerException e = assertThrows(NullPointerException.class, () -> new Attribute(null, String.class));
+        assertEquals("Attribute name can't be null", e.getMessage());
     }
 
     @Test
     public void shouldThrowErrorIfTypeIsNotValid() {
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new Attribute("abc", null));
-        assertEquals("type can't be null", e1.getMessage());
+        NullPointerException e = assertThrows(NullPointerException.class, () -> new Attribute("abc", null));
+        assertEquals("Attribute type can't be null", e.getMessage());
     }
 
     @Test

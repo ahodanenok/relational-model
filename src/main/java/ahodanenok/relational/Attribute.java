@@ -12,15 +12,10 @@ public final class Attribute {
     private final Class<?> type;
 
     public Attribute(String name, Class<?> type) {
-        Objects.requireNonNull(name, "name can't be null");
-        Objects.requireNonNull(type, "type can't be null");
+        Objects.requireNonNull(name, "Attribute name can't be null");
+        Objects.requireNonNull(type, "Attribute type can't be null");
 
-        name = name.trim();
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("name can't be empty");
-        }
-
-        this.name = name;
+        this.name = name.trim();
         this.type = type;
     }
 
