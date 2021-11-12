@@ -17,7 +17,7 @@ public final class TupleSchema {
 
     private final Set<Attribute> attributes;
 
-    public TupleSchema(Set<Attribute> attributes) {
+    TupleSchema(Set<Attribute> attributes) {
         this.attributes = Collections.unmodifiableSet(attributes);
     }
 
