@@ -36,7 +36,6 @@ public final class TupleSchema {
      * @throws NullPointerException if attribute name is null
      */
     public Attribute getAttribute(String name) {
-        Objects.requireNonNull(name, "name can't be null");
         return lookupAttribute(name, true);
     }
 
@@ -50,6 +49,7 @@ public final class TupleSchema {
     }
 
     private Attribute lookupAttribute(String name, boolean required) {
+        Objects.requireNonNull(name, "Attribute name can't be null");
         String lookupName = name.trim();
         Optional<Attribute> result = attributes.stream()
                 .filter(it -> it.getName().equals(lookupName))
