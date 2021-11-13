@@ -92,9 +92,12 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
+
         RenameOperator op = new RenameOperator(relation).addMapping("a", "b");
+
         AttributeAlreadyExistsException e = assertThrows(AttributeAlreadyExistsException.class, op::execute);
-        assertEquals("b", e.getName());
+        assertEquals("Attribute 'b' already exists", e.getMessage());
+        assertEquals(new Attribute("b", Integer.class), e.getExistingAttribute());
     }
 
     @Test

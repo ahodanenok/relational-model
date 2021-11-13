@@ -74,14 +74,29 @@ public class ProductOperatorTest {
         Relation b = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("b", "2").withValue("c", "22").select())
                 .select();
+        Relation c = new RelationSelector()
+                .addTuple(new TupleSelector().withValue("d", "2").withValue("c", true).select())
+                .select();
 
         ProductOperator op1 = new ProductOperator(a, b);
         AttributeAlreadyExistsException e1 = assertThrows(AttributeAlreadyExistsException.class, op1::execute);
-        assertEquals("b", e1.getName());
+        assertEquals("Attribute 'b' already exists", e1.getMessage());
+        assertEquals(new Attribute("b", String.class), e1.getExistingAttribute());
 
         ProductOperator op2 = new ProductOperator(b, a);
         AttributeAlreadyExistsException e2 = assertThrows(AttributeAlreadyExistsException.class, op2::execute);
-        assertEquals("b", e2.getName());
+        assertEquals("Attribute 'b' already exists", e2.getMessage());
+        assertEquals(new Attribute("b", String.class), e2.getExistingAttribute());
+
+        ProductOperator op3 = new ProductOperator(b, c);
+        AttributeAlreadyExistsException e3 = assertThrows(AttributeAlreadyExistsException.class, op3::execute);
+        assertEquals("Attribute 'c' already exists", e3.getMessage());
+        assertEquals(new Attribute("c", String.class), e3.getExistingAttribute());
+
+        ProductOperator op4 = new ProductOperator(c, b);
+        AttributeAlreadyExistsException e4 = assertThrows(AttributeAlreadyExistsException.class, op4::execute);
+        assertEquals("Attribute 'c' already exists", e4.getMessage());
+        assertEquals(new Attribute("c", Boolean.class), e4.getExistingAttribute());
     }
 
     @Test

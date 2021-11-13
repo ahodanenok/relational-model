@@ -63,7 +63,7 @@ public final class RenameOperator implements RelationalOperator {
             String toName = entry.getValue();
             // check that the target name doesn't exist yet in the schema
             if (!mappings.containsKey(toName) && sourceSchema.hasAttribute(toName)) {
-                throw new AttributeAlreadyExistsException(toName);
+                throw new AttributeAlreadyExistsException(sourceSchema.getAttribute(toName));
             }
         }
 

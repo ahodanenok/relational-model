@@ -142,7 +142,7 @@ public class RelationSchemaTest {
         RelationSchema schema = new RelationSchemaGenerator().withAttribute("123", boolean.class).generate();
 
         NullPointerException e = assertThrows(NullPointerException.class, () -> schema.getAttribute(null));
-        assertEquals("name can't be null", e.getMessage());
+        assertEquals("Attribute name can't be null", e.getMessage());
     }
 
     @Test

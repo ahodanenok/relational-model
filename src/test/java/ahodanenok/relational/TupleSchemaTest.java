@@ -1,5 +1,6 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.AttributeAlreadyExistsException;
 import ahodanenok.relational.exception.AttributeNotFoundException;
 import org.junit.jupiter.api.Test;
 
@@ -89,6 +90,18 @@ public class TupleSchemaTest {
 
         assertTrue(schema.hasAttribute("b"));
         assertEquals(new Attribute("b", Boolean.class), schema.getAttribute("b"));
+    }
+
+    @Test
+    public void shouldThrowErrorIfRepeatingAttributesDifferentTypes() {
+        AttributeAlreadyExistsException e = assertThrows(AttributeAlreadyExistsException.class, () -> {
+            new TupleSchemaGenerator()
+                    .withAttribute("a", Long.class)
+                    .withAttribute("b", Boolean.class)
+                    .withAttribute("a", Integer.class);
+        });
+        assertEquals("Attribute 'a' has been already added, but with a different type 'java.lang.Long', type received now 'java.lang.Integer'", e.getMessage());
+        assertEquals(new Attribute("a", Long.class), e.getExistingAttribute());
     }
 
     @Test

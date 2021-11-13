@@ -31,7 +31,7 @@ public final class ProductOperator implements RelationalOperator {
     public Relation execute() {
         for (Attribute a : left.schema().getAttributes()) {
             if (right.schema().hasAttribute(a.getName())) {
-                throw new AttributeAlreadyExistsException(a.getName());
+                throw new AttributeAlreadyExistsException(a);
             }
         }
 

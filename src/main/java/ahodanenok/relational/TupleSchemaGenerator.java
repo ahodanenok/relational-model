@@ -1,24 +1,36 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.AttributeAlreadyExistsException;
+
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 public final class TupleSchemaGenerator {
 
-    private final Set<Attribute> attributes = new HashSet<>();
+    private final Map<String, Attribute> attributes = new HashMap<>();
 
     public TupleSchemaGenerator withAttribute(String name, Class<?> type) {
         return withAttribute(new Attribute(name, type));
     }
 
     public TupleSchemaGenerator withAttribute(Attribute attribute) {
-        // todo: throw error if already added or ignore that?
-        // todo: throw error if attribute already added but with different type
-        attributes.add(attribute);
+        attributes.compute(attribute.getName(), (k, existingAttribute) -> {
+            if (existingAttribute != null && !attribute.equals(existingAttribute)) {
+                throw new AttributeAlreadyExistsException(
+                    String.format(
+                        "Attribute '%s' has been already added, but with a different type '%s', type received now '%s'",
+                        existingAttribute.getName(), existingAttribute.getType().getName(), attribute.getType().getName()),
+                    existingAttribute);
+            }
+
+            return attribute;
+        });
+
         return this;
     }
 
     public TupleSchema generate() {
-        return new TupleSchema(attributes);
+        return new TupleSchema(new HashSet<>(attributes.values()));
     }
 }
