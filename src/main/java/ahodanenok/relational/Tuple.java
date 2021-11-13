@@ -1,5 +1,7 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.AttributeNotFoundException;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -40,9 +42,15 @@ public final class Tuple {
     }
 
     public Object getValue(String attributeName) {
-        // todo: name is not null or empty
-        // todo: throw error if attribute not found
-        return values.get(attributeName);
+        Objects.requireNonNull(attributeName, "Attribute name can't be null");
+
+        attributeName = attributeName.trim();
+        Object value = values.get(attributeName);
+        if (value == null) {
+            throw new AttributeNotFoundException(attributeName);
+        }
+
+        return value;
     }
 
     @Override

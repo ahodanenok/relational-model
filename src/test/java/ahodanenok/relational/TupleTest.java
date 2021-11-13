@@ -1,5 +1,6 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.RelationalException;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -54,6 +55,46 @@ public class TupleTest {
         assertArrayEquals(new int[] { 1, 2, 3 }, (int[]) tuple.getValue("d"));
     }
 
+    @Test
+    public void shouldOverwriteAttributeValue() {
+        Tuple tuple = new TupleSelector()
+                .withValue("a", 100L)
+                .withValue("b", "hello!")
+                .withValue("a", 11L)
+                .select();
+
+        assertEquals(2, tuple.degree());
+        assertEquals(2, tuple.getAttributes().size());
+
+        Set<Attribute> expectedAttributes = new HashSet<>();
+        expectedAttributes.add(new Attribute("a", Long.class));
+        expectedAttributes.add(new Attribute("b", String.class));
+        assertEquals(expectedAttributes, tuple.getAttributes());
+
+        assertEquals(11L, tuple.getValue("a"));
+        assertEquals("hello!", tuple.getValue("b"));
+    }
+
+    @Test
+    public void shouldThrowErrorIfAttributeTypesDifferent() {
+        RelationalException e = assertThrows(RelationalException.class, () -> {
+            new TupleSelector()
+                    .withValue("a", 100L)
+                    .withValue("b", "hello!")
+                    .withValue("a", 11);
+        });
+
+        assertEquals("Can't change attribute type for 'a', initial type is 'java.lang.Long', current type is 'java.lang.Integer'", e.getMessage());
+    }
+
+    @Test
+    public void shouldThrowErrorIfAttributeValueDiffersFromAttributeType() {
+        RelationalException e = assertThrows(RelationalException.class, () -> {
+            new TupleSelector().withValue(new Attribute("test", Integer.class), 100L);
+        });
+
+        assertEquals("Value type 'java.lang.Long' for attribute 'test' doesn't equal its type 'java.lang.Integer'", e.getMessage());
+    }
 
     @Test
     public void shouldBeEqualWithTheSameAttributesAndValues() {

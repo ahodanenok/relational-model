@@ -1,6 +1,5 @@
 package ahodanenok.relational;
 
-import ahodanenok.relational.exception.AttributeAlreadyExistsException;
 import ahodanenok.relational.exception.RelationalException;
 
 import java.util.HashMap;
@@ -24,11 +23,11 @@ public final class TupleSchemaGenerator {
     public TupleSchemaGenerator withAttribute(Attribute attribute) {
         attributes.compute(attribute.getName(), (k, existingAttribute) -> {
             if (existingAttribute != null && !attribute.equals(existingAttribute)) {
-                throw new AttributeAlreadyExistsException(
-                    String.format(
-                        "Attribute '%s' has been already added, but with a different type '%s', type received now '%s'",
-                        existingAttribute.getName(), existingAttribute.getType().getName(), attribute.getType().getName()),
-                    existingAttribute);
+                String msg = String.format(
+                        "Can't add attribute '%s' of type '%s' as it has already been added with type '%s'",
+                        attribute.getName(), attribute.getType().getName(), existingAttribute.getType().getName());
+
+                throw new RelationalException(msg);
             }
 
             return attribute;
