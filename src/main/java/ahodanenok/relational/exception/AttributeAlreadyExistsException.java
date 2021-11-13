@@ -5,7 +5,7 @@ import ahodanenok.relational.Attribute;
 /**
  * Thrown if it's necessary to show that attribute with the given name is already defined in a tuple or relation.
  */
-public class AttributeAlreadyExistsException extends RuntimeException {
+public class AttributeAlreadyExistsException extends RelationalException {
 
     private final Attribute existingAttribute;
 

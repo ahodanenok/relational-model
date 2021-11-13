@@ -5,6 +5,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import java.util.*;
+
+/**
+ * Select a tuple from the set of all tuples.
+ *
+ * Tuple schema is determined by attribute names and types of corresponding values.
+ * If no values are provided, then empty (0-ary) tuple will be selected.
+ *
+ * Nulls are not supported as attribute values.
+ */
 public final class TupleSelector {
 
     private final Map<String, Object> values = new HashMap<>();
@@ -18,12 +28,6 @@ public final class TupleSelector {
     }
 
     public Tuple select() {
-        Set<Attribute> attributes = new HashSet<>();
-        for (Map.Entry<String, Object> entry : values.entrySet()) {
-            // todo: if value is null, then type can't be determined
-            attributes.add(new Attribute(entry.getKey(), entry.getValue().getClass()));
-        }
-
         return new Tuple(new TupleSchema(attributes), values);
     }
 }

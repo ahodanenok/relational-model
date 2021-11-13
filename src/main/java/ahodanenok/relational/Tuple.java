@@ -12,7 +12,8 @@ import java.util.Set;
  * more than one attribute with the same name. Attribute can have only one value,
  * which is of type defined in the attribute.
  *
- * Tuple can be empty (0-tuple), that it doesn't contain any attributes.
+ * Tuple can be empty (0-ary), that is it doesn't contain any attributes.
+ * Nulls are not supported as attribute values.
  */
 public final class Tuple {
 
@@ -26,23 +27,14 @@ public final class Tuple {
         this.values = values;
     }
 
-    /**
-     * Get schema of the tuple.
-     */
     public TupleSchema schema() {
         return schema;
     }
 
-    /**
-     * Get number of attributes in the tuple
-     */
     public int degree() {
         return schema.degree();
     }
 
-    /**
-     * Get attributes defined in this tuple
-     */
     public Set<Attribute> getAttributes() {
         return schema.getAttributes();
     }

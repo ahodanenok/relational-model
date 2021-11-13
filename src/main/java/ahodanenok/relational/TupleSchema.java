@@ -21,29 +21,14 @@ public final class TupleSchema {
         this.attributes = Collections.unmodifiableSet(attributes);
     }
 
-    /**
-     * Number of attributes in the schema.
-     */
     public int degree() {
         return attributes.size();
     }
 
-    /**
-     * Get attribute with the given name.
-     *
-     * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
-     * @throws AttributeNotFoundException if attribute wasn't found
-     * @throws NullPointerException if attribute name is null
-     */
     public Attribute getAttribute(String name) {
         return lookupAttribute(name, true);
     }
 
-    /**
-     * Check if attribute with the given name exists in the schema.
-     *
-     * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
-     */
     public boolean hasAttribute(String name) {
         return lookupAttribute(name, false) != null;
     }
@@ -62,12 +47,6 @@ public final class TupleSchema {
         return result.orElse(null);
     }
 
-    /**
-     * Get all attributes in the schema.
-     *
-     * @return unmodifiable set of attributes without any particular order, empty list for 0-tuple
-     * todo: expose only iterator instead of set of attributes?
-     */
     public Set<Attribute> getAttributes() {
         return attributes;
     }

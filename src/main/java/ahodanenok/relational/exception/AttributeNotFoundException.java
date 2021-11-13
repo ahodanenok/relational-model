@@ -3,7 +3,7 @@ package ahodanenok.relational.exception;
 /**
  * Thrown if during attribute lookup by its name it wasn't found.
  */
-public final class AttributeNotFoundException extends RuntimeException {
+public final class AttributeNotFoundException extends RelationalException {
 
     private final String name;
 
