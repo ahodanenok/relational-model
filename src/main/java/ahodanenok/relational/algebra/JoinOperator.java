@@ -35,12 +35,6 @@ public final class JoinOperator implements RelationalOperator {
         Set<String> commonAttributes = new HashSet<>();
         for (Attribute a : resultSchema.getAttributes()) {
             if (left.schema().hasAttribute(a.getName()) && right.schema().hasAttribute(a.getName())) {
-                if (!left.schema().getAttribute(a.getName()).equals(right.schema().getAttribute(a.getName()))) {
-                    // todo: what exception to throw?
-                    throw new IllegalArgumentException(
-                            String.format("Attribute '%s' has different types", a.getName()));
-                }
-
                 commonAttributes.add(a.getName());
             }
         }

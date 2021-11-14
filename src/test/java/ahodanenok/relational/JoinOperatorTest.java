@@ -1,6 +1,7 @@
 package ahodanenok.relational;
 
 import ahodanenok.relational.algebra.JoinOperator;
+import ahodanenok.relational.exception.RelationalException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,8 +55,9 @@ public class JoinOperatorTest {
         Relation b = new RelationSelector().withSchema(schemaB).select();
 
         JoinOperator op = new JoinOperator(a, b);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, op::execute);
-        assertEquals("Attribute 'b' has different types", e.getMessage());
+
+        RelationalException e = assertThrows(RelationalException.class, op::execute);
+        assertEquals("Can't add attribute 'b' of type 'java.lang.Integer' as it has already been added with type 'java.lang.Boolean'", e.getMessage());
     }
 
     @Test
