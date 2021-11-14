@@ -1,12 +1,11 @@
 package ahodanenok.relational;
 
-import ahodanenok.relational.exception.AttributeNotFoundException;
-
 import java.util.Collections;
 import java.util.Set;
 
 /**
- * Description of a relation.
+ * Unordered set of attributes in a relation.
+ * All tuples in a relation have only the attributes defined in its schema.
  */
 public final class RelationSchema {
 
@@ -18,37 +17,18 @@ public final class RelationSchema {
         this.schema = schema;
     }
 
-    /**
-     * Number of attributes in the schema.
-     */
     public int degree() {
         return schema.degree();
     }
 
-    /**
-     * Get attribute with the given name.
-     *
-     * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
-     * @throws AttributeNotFoundException if attribute wasn't found
-     * @throws NullPointerException if attribute is null
-     */
     public Attribute getAttribute(String name) {
         return schema.getAttribute(name);
     }
 
-    /**
-     * Check if attribute with the given name exists in the schema.
-     * @param name attribute name, case-sensitive, leading and trailing whitespaces will be trimmed
-     */
     public boolean hasAttribute(String name) {
         return schema.hasAttribute(name);
     }
 
-    /**
-     * Get all attributes in the schema.
-     *
-     * @return unmodifiable set of attributes without any particular order
-     */
     public Set<Attribute> getAttributes() {
         return schema.getAttributes();
     }

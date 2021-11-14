@@ -8,8 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Set of attributes in a particular tuple.
- * This set is not ordered, so the only way to referer to some attribute is by its name.
+ * Unordered set of attributes in a particular tuple.
  */
 public final class TupleSchema {
 

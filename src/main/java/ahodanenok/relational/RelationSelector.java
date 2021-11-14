@@ -1,11 +1,20 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.RelationalException;
 import ahodanenok.relational.exception.TupleSchemaMismatchException;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Select a relation from the set of all relations.
+ *
+ * Relation schema is determined by attributes of the tuples it contains.
+ * If no tuples are provided then schema must be stated explicitly.
+ *
+ * Nulls are not supported as attribute values.
+ */
 public final class RelationSelector {
 
     private RelationSchema schema;

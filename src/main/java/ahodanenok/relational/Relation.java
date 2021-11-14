@@ -20,34 +20,27 @@ public final class Relation {
         this.tuples = Collections.unmodifiableSet(tuples);
     }
 
-    /**
-     * Schema of the relation.
-     */
     public RelationSchema schema() {
         return schema;
     }
 
-    /**
-     * Get number of attributes in the relation.
-     */
     public int degree() {
         return schema.degree();
     }
 
-    /**
-     * Get number of tuples in the relation.
-     */
     public int cardinality() {
         return tuples.size();
     }
 
+    /**
+     * Check if relation doesn't contain any tuples (cardinality = 0).
+     */
     public boolean isEmpty() {
         return cardinality() == 0;
     }
 
     /**
      * Extract a single tuple from the relation.
-     *
      * @throws IllegalStateException if the relation is empty or contains more than one tuple
      */
     public Tuple getSingleTuple() {
