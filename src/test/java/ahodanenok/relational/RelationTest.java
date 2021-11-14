@@ -1,5 +1,6 @@
 package ahodanenok.relational;
 
+import ahodanenok.relational.exception.RelationalException;
 import ahodanenok.relational.exception.TupleSchemaMismatchException;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ public class RelationTest {
 
     @Test
     public void schemaIsRequiredWhenRelationIsEmpty() {
-        IllegalStateException e = assertThrows(IllegalStateException.class, () -> new RelationSelector().select());
+        RelationalException e = assertThrows(RelationalException.class, () -> new RelationSelector().select());
         assertEquals("Schema must be specified explicitly if the relation is empty", e.getMessage());
     }
 

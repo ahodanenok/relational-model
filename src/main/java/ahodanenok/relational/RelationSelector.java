@@ -36,7 +36,7 @@ public final class RelationSelector {
 
         // if schema is null, then no tuples were added and we can't infer it
         if (targetSchema == null) {
-            throw new IllegalStateException("Schema must be specified explicitly if the relation is empty");
+            throw new RelationalException("Schema must be specified explicitly if the relation is empty");
         }
 
         return new Relation(schema, tuples);
