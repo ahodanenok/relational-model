@@ -1,56 +1,39 @@
 package ahodanenok.relational.algebra;
 
 import ahodanenok.relational.Relation;
-import ahodanenok.relational.RelationSchema;
 import ahodanenok.relational.RelationSelector;
 import ahodanenok.relational.exception.RelationSchemaMismatchException;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- * Produces a new relation with each tuple in it existing in any of its input relations.
- * All input relations must be of the same type and the resulting relation will also be of that type.
- * Schema of the leftmost relation is used as the schema of the resulting relation.
+ * Union of two relations.
+ *
+ * Produces a new relation with all tuples existing in both relations.
+ * Schema of all tuples must be the same.
  */
 public final class UnionOperator implements RelationalOperator {
 
-    private final RelationSchema resultSchema;
-    private final Set<Relation> relations;
+    private final Relation left;
+    private final Relation right;
 
-    public UnionOperator(Relation a, Relation b) {
-        Objects.requireNonNull(a, "relation 'a' can't be null");
-        Objects.requireNonNull(b, "relation 'b' can't be null");
+    public UnionOperator(Relation left, Relation right) {
+        Objects.requireNonNull(left, "Relation can't be null: left");
+        Objects.requireNonNull(right, "Relation can't be null: right");
 
-        this.resultSchema = a.schema();
-        this.relations = new HashSet<>();
-        this.relations.add(a);
-        this.relations.add(b);
-    }
-
-    public UnionOperator addRelation(Relation relation) {
-        Objects.requireNonNull(relation, "relation can't be null");
-        this.relations.add(relation);
-        return this;
+        this.left = left;
+        this.right = right;
     }
 
     @Override
     public Relation execute() {
-        if (relations.size() == 1) {
-            return relations.iterator().next();
+        if (!left.schema().equals(right.schema())) {
+            throw new RelationSchemaMismatchException(right, left.schema());
         }
 
-        for (Relation r : relations) {
-            if (!r.schema().equals(resultSchema)) {
-                throw new RelationSchemaMismatchException(r, resultSchema);
-            }
-        }
-
-        RelationSelector relationSelector = new RelationSelector().withSchema(resultSchema);
-        for (Relation r : relations) {
-            r.tuples().forEach(relationSelector::addTuple);
-        }
+        RelationSelector relationSelector = new RelationSelector().withSchema(left.schema());
+        left.tuples().forEach(relationSelector::addTuple);
+        right.tuples().forEach(relationSelector::addTuple);
 
         return relationSelector.select();
     }
