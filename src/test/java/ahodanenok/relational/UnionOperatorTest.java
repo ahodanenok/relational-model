@@ -10,7 +10,10 @@ public class UnionOperatorTest {
 
     @Test
     public void shouldUnion0Relation() {
-        assertEquals(Relation.EMPTY, new UnionOperator(Relation.EMPTY, Relation.EMPTY).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new UnionOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new UnionOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_EMPTY).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new UnionOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new UnionOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_EMPTY).execute());
     }
 
     @Test
@@ -119,10 +122,10 @@ public class UnionOperatorTest {
 
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new UnionOperator(null, Relation.EMPTY));
+        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new UnionOperator(null, Relation.NULLARY_TUPLE));
         assertEquals("Relation can't be null: left", e1.getMessage());
 
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new UnionOperator(Relation.EMPTY, null));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new UnionOperator(Relation.NULLARY_TUPLE, null));
         assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }

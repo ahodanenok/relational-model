@@ -13,8 +13,10 @@ public class ProjectOperatorTest {
 
     @Test
     public void shouldProject0Relation() {
-        assertEquals(Relation.EMPTY, new ProjectOperator(Relation.EMPTY).execute());
-        assertEquals(Relation.EMPTY, new ProjectOperator(Relation.EMPTY).withoutAttributes().execute());
+        assertEquals(Relation.NULLARY_TUPLE, new ProjectOperator(Relation.NULLARY_TUPLE).includeAttributes().execute());
+        assertEquals(Relation.NULLARY_TUPLE, new ProjectOperator(Relation.NULLARY_TUPLE).withoutAttributes().execute());
+        assertEquals(Relation.NULLARY_EMPTY, new ProjectOperator(Relation.NULLARY_EMPTY).includeAttributes().execute());
+        assertEquals(Relation.NULLARY_EMPTY, new ProjectOperator(Relation.NULLARY_EMPTY).withoutAttributes().execute());
     }
 
     @Test
@@ -127,7 +129,7 @@ public class ProjectOperatorTest {
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> new ProjectOperator(null, Collections.emptyList()));
         assertEquals("Relation can't be null", e1.getMessage());
 
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new ProjectOperator(Relation.EMPTY, (List<String>) null));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new ProjectOperator(Relation.NULLARY_TUPLE, (List<String>) null));
         assertEquals("Attribute names can't be null", e2.getMessage());
     }
 }

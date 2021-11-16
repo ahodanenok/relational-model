@@ -327,11 +327,12 @@ public class RelationTest {
                 .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
                 .select();
 
-        assertTrue(Relation.EMPTY.isSupersetOf(Relation.EMPTY));
-        assertFalse(Relation.EMPTY.isSupersetOf(Relation.EMPTY, true));
-        assertFalse(Relation.EMPTY.isSupersetOf(nonEmpty));
-        assertTrue(nonEmpty.isSupersetOf(Relation.EMPTY));
-        assertTrue(nonEmpty.isSupersetOf(Relation.EMPTY, true));
+        assertTrue(Relation.NULLARY_TUPLE.isSupersetOf(Relation.NULLARY_TUPLE));
+        assertFalse(Relation.NULLARY_TUPLE.isSupersetOf(Relation.NULLARY_TUPLE, true));
+        assertFalse(Relation.NULLARY_TUPLE.isSupersetOf(nonEmpty));
+        assertFalse(nonEmpty.isSupersetOf(Relation.NULLARY_TUPLE));
+        assertTrue(nonEmpty.isSupersetOf(Relation.NULLARY_EMPTY));
+        assertTrue(nonEmpty.isSupersetOf(Relation.NULLARY_EMPTY, true));
     }
 
     @Test
@@ -409,11 +410,13 @@ public class RelationTest {
                 .addTuple(new TupleSelector().withValue("a", "1").withValue("b", 11).select())
                 .select();
 
-        assertTrue(Relation.EMPTY.isSubsetOf(Relation.EMPTY));
-        assertFalse(Relation.EMPTY.isSubsetOf(Relation.EMPTY, true));
-        assertTrue(Relation.EMPTY.isSubsetOf(nonEmpty));
-        assertFalse(nonEmpty.isSubsetOf(Relation.EMPTY));
-        assertFalse(nonEmpty.isSubsetOf(Relation.EMPTY, true));
+        assertTrue(Relation.NULLARY_TUPLE.isSubsetOf(Relation.NULLARY_TUPLE));
+        assertFalse(Relation.NULLARY_TUPLE.isSubsetOf(Relation.NULLARY_TUPLE, true));
+        assertTrue(Relation.NULLARY_EMPTY.isSubsetOf(nonEmpty));
+        assertTrue(Relation.NULLARY_EMPTY.isSubsetOf(nonEmpty, true));
+        assertFalse(Relation.NULLARY_TUPLE.isSubsetOf(nonEmpty));
+        assertFalse(nonEmpty.isSubsetOf(Relation.NULLARY_TUPLE));
+        assertFalse(nonEmpty.isSubsetOf(Relation.NULLARY_TUPLE, true));
     }
 
     @Test

@@ -9,8 +9,10 @@ public class RestrictOperatorTest {
 
     @Test
     public void shouldRestrict0Relation() {
-        assertEquals(Relation.EMPTY, new RestrictOperator(Relation.EMPTY, (r, t) -> true).execute());
-        assertEquals(Relation.EMPTY, new RestrictOperator(Relation.EMPTY, (r, t) -> false).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new RestrictOperator(Relation.NULLARY_TUPLE, (r, t) -> true).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new RestrictOperator(Relation.NULLARY_EMPTY, (r, t) -> true).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new RestrictOperator(Relation.NULLARY_TUPLE, (r, t) -> false).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new RestrictOperator(Relation.NULLARY_EMPTY, (r, t) -> false).execute());
     }
 
     @Test
@@ -75,7 +77,7 @@ public class RestrictOperatorTest {
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> new RestrictOperator(null, (r, t) -> true));
         assertEquals("Relation can't be null", e1.getMessage());
 
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new RestrictOperator(Relation.EMPTY, null));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new RestrictOperator(Relation.NULLARY_TUPLE, null));
         assertEquals("Predicate can't be null", e2.getMessage());
     }
 }

@@ -10,7 +10,8 @@ import java.util.stream.Stream;
  */
 public final class Relation {
 
-    public static final Relation EMPTY = new Relation(RelationSchema.EMPTY, Collections.emptySet());
+    public static final Relation NULLARY_TUPLE = new Relation(RelationSchema.EMPTY, Collections.singleton(Tuple.EMPTY));
+    public static final Relation NULLARY_EMPTY = new Relation(RelationSchema.EMPTY, Collections.emptySet());
 
     private final RelationSchema schema;
     private final Set<Tuple> tuples;

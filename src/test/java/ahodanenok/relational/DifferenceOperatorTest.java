@@ -1,7 +1,6 @@
 package ahodanenok.relational;
 
 import ahodanenok.relational.algebra.DifferenceOperator;
-import ahodanenok.relational.algebra.UnionOperator;
 import ahodanenok.relational.exception.RelationSchemaMismatchException;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,10 @@ public class DifferenceOperatorTest {
 
     @Test
     public void shouldSubtract0Relation() {
-        assertEquals(Relation.EMPTY, new DifferenceOperator(Relation.EMPTY, Relation.EMPTY).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new DifferenceOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new DifferenceOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_EMPTY).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new DifferenceOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new DifferenceOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_EMPTY).execute());
     }
 
     @Test
@@ -115,10 +117,10 @@ public class DifferenceOperatorTest {
 
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new DifferenceOperator(null, Relation.EMPTY));
+        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new DifferenceOperator(null, Relation.NULLARY_TUPLE));
         assertEquals("Relation can't be null: left", e1.getMessage());
 
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new DifferenceOperator(Relation.EMPTY, null));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new DifferenceOperator(Relation.NULLARY_TUPLE, null));
         assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }

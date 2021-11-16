@@ -11,7 +11,10 @@ public class IntersectOperatorTest {
 
     @Test
     public void shouldIntersect0Relation() {
-        assertEquals(Relation.EMPTY, new IntersectOperator(Relation.EMPTY, Relation.EMPTY).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new IntersectOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new IntersectOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_EMPTY).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new IntersectOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new IntersectOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_EMPTY).execute());
     }
 
     @Test
@@ -112,10 +115,10 @@ public class IntersectOperatorTest {
 
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new IntersectOperator(null, Relation.EMPTY));
+        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new IntersectOperator(null, Relation.NULLARY_TUPLE));
         assertEquals("Relation can't be null: left", e1.getMessage());
 
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new IntersectOperator(Relation.EMPTY, null));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new IntersectOperator(Relation.NULLARY_TUPLE, null));
         assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }

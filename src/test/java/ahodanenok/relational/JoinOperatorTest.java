@@ -11,7 +11,10 @@ public class JoinOperatorTest {
 
     @Test
     public void shouldJoin0Relation() {
-        assertEquals(Relation.EMPTY, new JoinOperator(Relation.EMPTY, Relation.EMPTY).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new JoinOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new JoinOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_EMPTY).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new JoinOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new JoinOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_EMPTY).execute());
     }
 
     @Test
@@ -133,10 +136,10 @@ public class JoinOperatorTest {
 
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new JoinOperator(null, Relation.EMPTY));
+        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new JoinOperator(null, Relation.NULLARY_TUPLE));
         assertEquals("Relation can't be null: left", e1.getMessage());
 
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new JoinOperator(Relation.EMPTY, null));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new JoinOperator(Relation.NULLARY_TUPLE, null));
         assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }

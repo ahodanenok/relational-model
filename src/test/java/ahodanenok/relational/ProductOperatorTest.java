@@ -1,9 +1,7 @@
 package ahodanenok.relational;
 
 import ahodanenok.relational.algebra.ProductOperator;
-import ahodanenok.relational.algebra.UnionOperator;
 import ahodanenok.relational.exception.AttributeAlreadyExistsException;
-import ahodanenok.relational.exception.RelationSchemaMismatchException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +11,10 @@ public class ProductOperatorTest {
 
     @Test
     public void shouldMultiply0Relation() {
-        assertEquals(Relation.EMPTY, new ProductOperator(Relation.EMPTY, Relation.EMPTY).execute());
+        assertEquals(Relation.NULLARY_TUPLE, new ProductOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new ProductOperator(Relation.NULLARY_TUPLE, Relation.NULLARY_EMPTY).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new ProductOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_TUPLE).execute());
+        assertEquals(Relation.NULLARY_EMPTY, new ProductOperator(Relation.NULLARY_EMPTY, Relation.NULLARY_EMPTY).execute());
     }
 
     @Test
@@ -101,10 +102,10 @@ public class ProductOperatorTest {
 
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new ProductOperator(null, Relation.EMPTY));
+        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new ProductOperator(null, Relation.NULLARY_TUPLE));
         assertEquals("Relation can't be null: left", e1.getMessage());
 
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new ProductOperator(Relation.EMPTY, null));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new ProductOperator(Relation.NULLARY_TUPLE, null));
         assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }

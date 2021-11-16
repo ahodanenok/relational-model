@@ -47,8 +47,7 @@ public final class ProjectOperator implements RelationalOperator {
     @Override
     public Relation execute() {
         if (attributeNames.isEmpty() && included) {
-            // todo: DEE, DUM!
-            return Relation.EMPTY;
+            return relation.isEmpty() ? Relation.NULLARY_EMPTY : Relation.NULLARY_TUPLE;
         }
 
         RelationSchema schema = relation.schema();
