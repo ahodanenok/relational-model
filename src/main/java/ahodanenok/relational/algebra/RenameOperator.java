@@ -3,7 +3,6 @@ package ahodanenok.relational.algebra;
 import ahodanenok.relational.*;
 import ahodanenok.relational.exception.AttributeNotFoundException;
 import ahodanenok.relational.exception.AttributeAlreadyExistsException;
-import ahodanenok.relational.util.Strings;
 
 import java.util.HashMap;
 import java.util.Iterator;
