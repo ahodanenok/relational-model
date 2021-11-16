@@ -94,43 +94,7 @@ public class DifferenceOperatorTest {
     }
 
     @Test
-    public void shouldSubtractMultipleRelations() {
-        Relation a = new RelationSelector()
-                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", "11").select())
-                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", "22").select())
-                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", "33").select())
-                .addTuple(new TupleSelector().withValue("a", "4").withValue("b", "44").select())
-                .addTuple(new TupleSelector().withValue("a", "5").withValue("b", "55").select())
-                .addTuple(new TupleSelector().withValue("a", "6").withValue("b", "66").select())
-                .addTuple(new TupleSelector().withValue("a", "7").withValue("b", "77").select())
-                .select();
-        Relation b = new RelationSelector()
-                .addTuple(new TupleSelector().withValue("a", "5").withValue("b", "55").select())
-                .addTuple(new TupleSelector().withValue("a", "7").withValue("b", "77").select())
-                .addTuple(new TupleSelector().withValue("a", "9").withValue("b", "99").select())
-                .select();
-        Relation c = new RelationSelector()
-                .addTuple(new TupleSelector().withValue("a", "1").withValue("b", "11").select())
-                .addTuple(new TupleSelector().withValue("a", "5").withValue("b", "55").select())
-                .select();
-        Relation d = new RelationSelector()
-                .addTuple(new TupleSelector().withValue("a", "4").withValue("b", "44").select())
-                .addTuple(new TupleSelector().withValue("a", "7").withValue("b", "77").select())
-                .addTuple(new TupleSelector().withValue("a", "0").withValue("b", "00").select())
-                .select();
-
-        Relation result = new DifferenceOperator(a, b).addRelation(c).addRelation(d).execute();
-
-        Relation expected = new RelationSelector()
-                .addTuple(new TupleSelector().withValue("a", "2").withValue("b", "22").select())
-                .addTuple(new TupleSelector().withValue("a", "3").withValue("b", "33").select())
-                .addTuple(new TupleSelector().withValue("a", "6").withValue("b", "66").select())
-                .select();
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void shouldThrowErrorIfNotAllTuplesHaveSameSchema() {
+    public void shouldThrowErrorIfSchemasAreDifferent() {
         Relation a = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("a", "1").withValue("b", "11").select())
                 .select();
@@ -147,22 +111,14 @@ public class DifferenceOperatorTest {
         RelationSchemaMismatchException e2 = assertThrows(RelationSchemaMismatchException.class, op2::execute);
         assertEquals(a, e2.getMismatchedRelation());
         assertEquals(b.schema(), e2.getTargetSchema());
-
-        DifferenceOperator op3 = new DifferenceOperator(a, a).addRelation(b);
-        RelationSchemaMismatchException e3 = assertThrows(RelationSchemaMismatchException.class, op3::execute);
-        assertEquals(b, e3.getMismatchedRelation());
-        assertEquals(a.schema(), e3.getTargetSchema());
     }
 
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> new DifferenceOperator(null, Relation.EMPTY));
-        assertEquals("relation 'a' can't be null", e1.getMessage());
+        assertEquals("Relation can't be null: left", e1.getMessage());
 
         NullPointerException e2 = assertThrows(NullPointerException.class, () -> new DifferenceOperator(Relation.EMPTY, null));
-        assertEquals("relation 'b' can't be null", e2.getMessage());
-
-        NullPointerException e3 = assertThrows(NullPointerException.class, () -> new DifferenceOperator(Relation.EMPTY, Relation.EMPTY).addRelation(null));
-        assertEquals("relation can't be null", e3.getMessage());
+        assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }
