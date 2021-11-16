@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Natural join of two relations.
  *
- * Produces a new relation containing tuples that have the same values of the common attributes in both relations.
+ * <p>Produces a new relation containing tuples that have the same values of the common attributes in both relations.
  * If there are no common attributes - result is the same as of the cartesian product operator.
  */
 public final class JoinOperator implements RelationalOperator {
@@ -18,8 +18,8 @@ public final class JoinOperator implements RelationalOperator {
     private final Relation right;
 
     public JoinOperator(Relation left, Relation right) {
-        Objects.requireNonNull(left, "Left relation can't be null");
-        Objects.requireNonNull(right, "Right relation can't be null");
+        Objects.requireNonNull(left, "Relation can't be null: left");
+        Objects.requireNonNull(right, "Relation can't be null: right");
         this.left = left;
         this.right = right;
     }

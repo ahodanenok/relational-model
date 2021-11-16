@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Union of two relations.
  *
- * Produces a new relation with all tuples existing in both relations.
+ * <p>Produces a new relation with all tuples existing in any of the relations.
  * Schema of all tuples must be the same.
  */
 public final class UnionOperator implements RelationalOperator {

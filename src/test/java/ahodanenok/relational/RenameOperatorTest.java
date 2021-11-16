@@ -108,18 +108,10 @@ public class RenameOperatorTest {
                 .select();
         RenameOperator op = new RenameOperator(relation);
 
-        IllegalArgumentException e1 = assertThrows(IllegalArgumentException.class, () -> op.addMapping(null, "a"));
-        assertEquals("fromName can't be null or empty", e1.getMessage());
+        NullPointerException e1 = assertThrows(NullPointerException.class, () -> op.addMapping(null, "a"));
+        assertEquals("Name can't be null", e1.getMessage());
 
-        IllegalArgumentException e2 = assertThrows(IllegalArgumentException.class, () -> op.addMapping("", "a"));
-        assertEquals("fromName can't be null or empty", e2.getMessage());
-
-        IllegalArgumentException e3 = assertThrows(IllegalArgumentException.class, () -> op.addMapping("a", null));
-        assertEquals("toName can't be null or empty", e3.getMessage());
-
-        IllegalArgumentException e4 = assertThrows(IllegalArgumentException.class, () -> op.addMapping("a", ""));
-        assertEquals("toName can't be null or empty", e4.getMessage());
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> op.addMapping("a", null));
+        assertEquals("Target name can't be null", e2.getMessage());
     }
-
-
 }

@@ -73,9 +73,9 @@ public class RestrictOperatorTest {
     @Test
     public void shouldThrowErrorIfRelationOrPredicateIsNull() {
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> new RestrictOperator(null, (r, t) -> true));
-        assertEquals("relation can't be null", e1.getMessage());
+        assertEquals("Relation can't be null", e1.getMessage());
 
         NullPointerException e2 = assertThrows(NullPointerException.class, () -> new RestrictOperator(Relation.EMPTY, null));
-        assertEquals("predicate can't be null", e2.getMessage());
+        assertEquals("Predicate can't be null", e2.getMessage());
     }
 }

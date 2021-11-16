@@ -10,7 +10,7 @@ import java.util.function.BiPredicate;
 /**
  * Restrict operator for a single relation.
  *
- * Produces a new relation with all tuples in it satisfying some boolean predicate.
+ * <p>Produces a new relation with all tuples in it satisfying some boolean predicate.
  */
 public final class RestrictOperator implements RelationalOperator {
 
@@ -18,8 +18,8 @@ public final class RestrictOperator implements RelationalOperator {
     private final BiPredicate<Relation, Tuple> predicate;
 
     public RestrictOperator(Relation relation, BiPredicate<Relation, Tuple> predicate) {
-        Objects.requireNonNull(relation, "relation can't be null");
-        Objects.requireNonNull(predicate, "predicate can't be null");
+        Objects.requireNonNull(relation, "Relation can't be null");
+        Objects.requireNonNull(predicate, "Predicate can't be null");
         this.relation = relation;
         this.predicate = predicate;
     }

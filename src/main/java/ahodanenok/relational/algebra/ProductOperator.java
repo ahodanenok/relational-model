@@ -20,8 +20,8 @@ public final class ProductOperator implements RelationalOperator {
     private final Relation right;
 
     public ProductOperator(Relation left, Relation right) {
-        Objects.requireNonNull(left, "relation 'a' can't be null");
-        Objects.requireNonNull(right, "relation 'b' can't be null");
+        Objects.requireNonNull(left, "Relation can't be null: left");
+        Objects.requireNonNull(right, "Relation can't be null: right");
 
         this.left = left;
         this.right = right;

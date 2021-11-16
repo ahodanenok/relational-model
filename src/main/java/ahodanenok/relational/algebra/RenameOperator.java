@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Produces a new relation with the names of some attributes changed.
+ * Rename attributes in a single relation.
+ *
+ * <p>Produces a new relation with the names of attributes changed according to the given mappings.
  */
 public final class RenameOperator implements RelationalOperator {
 
@@ -27,14 +29,14 @@ public final class RenameOperator implements RelationalOperator {
     /**
      * Add renaming mapping.
      *
-     * @param fromName attribute to rename
-     * @param toName a new name for the attribute
-     * @throws IllegalArgumentException if any of the names is null or empty
+     * @param name attribute to rename
+     * @param targetName a new name for the attribute
+     * @throws NullPointerException if any of the names is null
      */
-    public RenameOperator addMapping(String fromName, String toName) {
-        Strings.requireNotEmpty(fromName, "fromName can't be null or empty");
-        Strings.requireNotEmpty(toName, "toName can't be null or empty");
-        this.mappings.put(fromName.trim(), toName.trim());
+    public RenameOperator addMapping(String name, String targetName) {
+        Objects.requireNonNull(name, "Name can't be null");
+        Objects.requireNonNull(targetName, "Target name can't be null");
+        this.mappings.put(name.trim(), targetName.trim());
         return this;
     }
 
@@ -54,16 +56,17 @@ public final class RenameOperator implements RelationalOperator {
                 continue;
             }
 
-            String fromName = entry.getKey();
+            String name = entry.getKey();
             // check that the attribute exists in the schema
-            if (!sourceSchema.hasAttribute(fromName)) {
-                throw new AttributeNotFoundException(fromName);
+            if (!sourceSchema.hasAttribute(name)) {
+                throw new AttributeNotFoundException(name);
             }
 
-            String toName = entry.getValue();
+            // todo: check no many-to-one
+            String targetName = entry.getValue();
             // check that the target name doesn't exist yet in the schema
-            if (!mappings.containsKey(toName) && sourceSchema.hasAttribute(toName)) {
-                throw new AttributeAlreadyExistsException(sourceSchema.getAttribute(toName));
+            if (!mappings.containsKey(targetName) && sourceSchema.hasAttribute(targetName)) {
+                throw new AttributeAlreadyExistsException(sourceSchema.getAttribute(targetName));
             }
         }
 

@@ -125,9 +125,9 @@ public class ProjectOperatorTest {
     @Test
     public void shouldThrowErrorIfNullParameters() {
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> new ProjectOperator(null, Collections.emptyList()));
-        assertEquals("relation can't be null", e1.getMessage());
+        assertEquals("Relation can't be null", e1.getMessage());
 
         NullPointerException e2 = assertThrows(NullPointerException.class, () -> new ProjectOperator(Relation.EMPTY, (List<String>) null));
-        assertEquals("attribute names can't be null", e2.getMessage());
+        assertEquals("Attribute names can't be null", e2.getMessage());
     }
 }

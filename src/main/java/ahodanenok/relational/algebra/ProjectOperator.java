@@ -8,10 +8,8 @@ import java.util.function.Predicate;
 
 /**
  * Projection of a single tuple.
- * <p>
- * Produces a new relation with a subset of its attributes.
- * Depending on the mode specified attributes are excluded or the ones being left.
- * Default mode is to leave specified attributes.
+ *
+ * <p>Produces a new relation with a subset of its attributes.
  */
 public final class ProjectOperator implements RelationalOperator {
 
@@ -24,15 +22,14 @@ public final class ProjectOperator implements RelationalOperator {
     }
 
     public ProjectOperator(Relation relation, List<String> attributeNames) {
-        Objects.requireNonNull(relation, "relation can't be null");
-        Objects.requireNonNull(attributeNames, "attribute names can't be null");
+        Objects.requireNonNull(relation, "Relation can't be null");
+        Objects.requireNonNull(attributeNames, "Attribute names can't be null");
         this.relation = relation;
         this.attributeNames = new HashSet<>(attributeNames);
     }
 
     /**
-     * Produce a new relation only with specified attributes.
-     * This is default mode.
+     * Produce a new relation only with specified attributes. This is default mode.
      */
     public ProjectOperator includeAttributes() {
         this.included = true;
@@ -50,6 +47,7 @@ public final class ProjectOperator implements RelationalOperator {
     @Override
     public Relation execute() {
         if (attributeNames.isEmpty() && included) {
+            // todo: DEE, DUM!
             return Relation.EMPTY;
         }
 
@@ -73,7 +71,9 @@ public final class ProjectOperator implements RelationalOperator {
         if (!included) {
             predicate = predicate.negate();
         }
-        relation.schema().getAttributes().stream().filter(predicate).forEach(resultSchemaGenerator::withAttribute);
+        relation.schema().getAttributes().stream()
+                .filter(predicate)
+                .forEach(resultSchemaGenerator::withAttribute);
 
         return resultSchemaGenerator.generate();
     }

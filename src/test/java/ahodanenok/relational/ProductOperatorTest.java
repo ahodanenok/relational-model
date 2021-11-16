@@ -102,9 +102,9 @@ public class ProductOperatorTest {
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> new ProductOperator(null, Relation.EMPTY));
-        assertEquals("relation 'a' can't be null", e1.getMessage());
+        assertEquals("Relation can't be null: left", e1.getMessage());
 
         NullPointerException e2 = assertThrows(NullPointerException.class, () -> new ProductOperator(Relation.EMPTY, null));
-        assertEquals("relation 'b' can't be null", e2.getMessage());
+        assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }

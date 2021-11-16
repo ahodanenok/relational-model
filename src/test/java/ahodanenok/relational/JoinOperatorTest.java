@@ -134,9 +134,9 @@ public class JoinOperatorTest {
     @Test
     public void shouldThrowErrorIfRelationIsNull() {
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> new JoinOperator(null, Relation.EMPTY));
-        assertEquals("Left relation can't be null", e1.getMessage());
+        assertEquals("Relation can't be null: left", e1.getMessage());
 
         NullPointerException e2 = assertThrows(NullPointerException.class, () -> new JoinOperator(Relation.EMPTY, null));
-        assertEquals("Right relation can't be null", e2.getMessage());
+        assertEquals("Relation can't be null: right", e2.getMessage());
     }
 }
