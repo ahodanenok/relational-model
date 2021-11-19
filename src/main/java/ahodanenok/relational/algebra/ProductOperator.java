@@ -29,15 +29,16 @@ public final class ProductOperator implements RelationalOperator {
 
     @Override
     public Relation execute() {
-        for (Attribute a : left.schema().getAttributes()) {
-            if (right.schema().hasAttribute(a.getName())) {
-                throw new AttributeAlreadyExistsException(a);
-            }
-        }
+        left.attributes()
+                .filter(a -> right.schema().hasAttribute(a.getName()))
+                .findFirst()
+                .ifPresent(a -> {
+                    throw new AttributeAlreadyExistsException(a);
+                });
 
         RelationSchemaGenerator resultSchemaGenerator = new RelationSchemaGenerator();
-        left.schema().getAttributes().forEach(resultSchemaGenerator::withAttribute);
-        right.schema().getAttributes().forEach(resultSchemaGenerator::withAttribute);
+        left.attributes().forEach(resultSchemaGenerator::withAttribute);
+        right.attributes().forEach(resultSchemaGenerator::withAttribute);
 
         RelationSelector resultRelationSelector = new RelationSelector()
                 .withSchema(resultSchemaGenerator.generate());
@@ -50,12 +51,8 @@ public final class ProductOperator implements RelationalOperator {
 
     private Tuple union(Tuple left, Tuple right) {
         TupleSelector tupleSelector = new TupleSelector();
-        for (Attribute a : left.getAttributes()) {
-            tupleSelector.withValue(a.getName(), left.getValue(a.getName()));
-        }
-        for (Attribute a : right.getAttributes()) {
-            tupleSelector.withValue(a.getName(), right.getValue(a.getName()));
-        }
+        left.attributes().forEach(a -> tupleSelector.withValue(a.getName(), left.getValue(a.getName())));
+        right.attributes().forEach(a -> tupleSelector.withValue(a.getName(), right.getValue(a.getName())));
 
         return tupleSelector.select();
     }

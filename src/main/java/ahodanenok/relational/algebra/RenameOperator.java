@@ -70,13 +70,13 @@ public final class RenameOperator implements RelationalOperator {
         }
 
         RelationSchemaGenerator resultSchemaGenerator = new RelationSchemaGenerator();
-        for (Attribute a : sourceSchema.getAttributes()) {
+        sourceSchema.attributes().forEach(a -> {
             if (mappings.containsKey(a.getName())) {
                 resultSchemaGenerator.withAttribute(new Attribute(mappings.get(a.getName()), a.getType()));
             } else {
                 resultSchemaGenerator.withAttribute(a);
             }
-        }
+        });
 
         RelationSchema resultSchema = resultSchemaGenerator.generate();
         RelationSelector resultRelationSelector = new RelationSelector().withSchema(resultSchema);
@@ -87,10 +87,10 @@ public final class RenameOperator implements RelationalOperator {
 
     private Tuple renameTuple(Tuple t) {
         TupleSelector tupleSelector = new TupleSelector();
-        for (Attribute a : t.getAttributes()) {
+        t.attributes().forEach(a -> {
             String resultName = mappings.getOrDefault(a.getName(), a.getName());
             tupleSelector.withValue(resultName, t.getValue(a.getName()));
-        }
+        });
 
         return tupleSelector.select();
     }

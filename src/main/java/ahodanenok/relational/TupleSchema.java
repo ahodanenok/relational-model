@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Unordered set of attributes in a particular tuple.
@@ -46,8 +47,8 @@ public final class TupleSchema {
         return result.orElse(null);
     }
 
-    public Set<Attribute> getAttributes() {
-        return attributes;
+    public Stream<Attribute> attributes() {
+        return attributes.stream();
     }
 
     @Override

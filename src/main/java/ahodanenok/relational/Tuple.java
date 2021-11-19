@@ -5,7 +5,7 @@ import ahodanenok.relational.exception.AttributeNotFoundException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Tuple is an unordered set of attributes with their values.
@@ -37,8 +37,8 @@ public final class Tuple {
         return schema.degree();
     }
 
-    public Set<Attribute> getAttributes() {
-        return schema.getAttributes();
+    public Stream<Attribute> attributes() {
+        return schema.attributes();
     }
 
     public Object getValue(String attributeName) {

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,16 +15,16 @@ public class TupleTest {
     public void shouldSelectTupleWithoutAttributes() {
         Tuple tuple = new TupleSelector().select();
         assertEquals(0, tuple.degree());
-        assertEquals(0, tuple.getAttributes().size());
+        assertEquals(0, tuple.attributes().count());
     }
 
     @Test
     public void shouldSelectTupleWithOneAttribute() {
         Tuple tuple = new TupleSelector().withValue("test", 100).select();
         assertEquals(1, tuple.degree());
-        assertEquals(1, tuple.getAttributes().size());
+        assertEquals(1, tuple.attributes().count());
 
-        Attribute attribute = tuple.getAttributes().iterator().next();
+        Attribute attribute = tuple.attributes().iterator().next();
         assertEquals("test", attribute.getName());
         assertEquals(Integer.class, attribute.getType());
 
@@ -40,14 +41,14 @@ public class TupleTest {
                 .select();
 
         assertEquals(4, tuple.degree());
-        assertEquals(4, tuple.getAttributes().size());
+        assertEquals(4, tuple.attributes().count());
 
         Set<Attribute> expectedAttributes = new HashSet<>();
         expectedAttributes.add(new Attribute("a", Long.class));
         expectedAttributes.add(new Attribute("b", String.class));
         expectedAttributes.add(new Attribute("c", Boolean.class));
         expectedAttributes.add(new Attribute("d", int[].class));
-        assertEquals(expectedAttributes, tuple.getAttributes());
+        assertEquals(expectedAttributes, tuple.attributes().collect(Collectors.toSet()));
 
         assertEquals(100L, tuple.getValue("a"));
         assertEquals("hello!", tuple.getValue("b"));
@@ -64,12 +65,12 @@ public class TupleTest {
                 .select();
 
         assertEquals(2, tuple.degree());
-        assertEquals(2, tuple.getAttributes().size());
+        assertEquals(2, tuple.attributes().count());
 
         Set<Attribute> expectedAttributes = new HashSet<>();
         expectedAttributes.add(new Attribute("a", Long.class));
         expectedAttributes.add(new Attribute("b", String.class));
-        assertEquals(expectedAttributes, tuple.getAttributes());
+        assertEquals(expectedAttributes, tuple.attributes().collect(Collectors.toSet()));
 
         assertEquals(11L, tuple.getValue("a"));
         assertEquals("hello!", tuple.getValue("b"));

@@ -2,9 +2,9 @@ package ahodanenok.relational.algebra;
 
 import ahodanenok.relational.*;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Natural join of two relations.
@@ -27,17 +27,15 @@ public final class JoinOperator implements RelationalOperator {
     @Override
     public Relation execute() {
         RelationSchemaGenerator resultSchemaGenerator = new RelationSchemaGenerator();
-        left.schema().getAttributes().forEach(resultSchemaGenerator::withAttribute);
-        right.schema().getAttributes().forEach(resultSchemaGenerator::withAttribute);
+        left.attributes().forEach(resultSchemaGenerator::withAttribute);
+        right.attributes().forEach(resultSchemaGenerator::withAttribute);
 
         RelationSchema resultSchema = resultSchemaGenerator.generate();
 
-        Set<String> commonAttributes = new HashSet<>();
-        for (Attribute a : resultSchema.getAttributes()) {
-            if (left.schema().hasAttribute(a.getName()) && right.schema().hasAttribute(a.getName())) {
-                commonAttributes.add(a.getName());
-            }
-        }
+        Set<String> commonAttributes = resultSchema.attributes()
+                .map(Attribute::getName)
+                .filter(a -> left.schema().hasAttribute(a) && right.schema().hasAttribute(a))
+                .collect(Collectors.toSet());
 
         RelationSelector resultRelationSelector = new RelationSelector().withSchema(resultSchema);
         left.tuples().forEach(tl -> {
@@ -53,12 +51,8 @@ public final class JoinOperator implements RelationalOperator {
 
     private Tuple union(Tuple left, Tuple right) {
         TupleSelector tupleSelector = new TupleSelector();
-        for (Attribute a : left.getAttributes()) {
-            tupleSelector.withValue(a.getName(), left.getValue(a.getName()));
-        }
-        for (Attribute a : right.getAttributes()) {
-            tupleSelector.withValue(a.getName(), right.getValue(a.getName()));
-        }
+        left.attributes().forEach(a -> tupleSelector.withValue(a.getName(), left.getValue(a.getName())));
+        right.attributes().forEach(a -> tupleSelector.withValue(a.getName(), right.getValue(a.getName())));
 
         return tupleSelector.select();
     }

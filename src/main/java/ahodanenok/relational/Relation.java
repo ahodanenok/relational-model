@@ -40,6 +40,10 @@ public final class Relation {
         return cardinality() == 0;
     }
 
+    public Stream<Attribute> attributes() {
+        return schema.attributes();
+    }
+
     /**
      * Extract a single tuple from the relation.
      * @throws IllegalStateException if the relation is empty or contains more than one tuple

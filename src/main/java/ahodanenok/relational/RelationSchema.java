@@ -2,6 +2,7 @@ package ahodanenok.relational;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Unordered set of attributes in a relation.
@@ -29,8 +30,8 @@ public final class RelationSchema {
         return schema.hasAttribute(name);
     }
 
-    public Set<Attribute> getAttributes() {
-        return schema.getAttributes();
+    public Stream<Attribute> attributes() {
+        return schema.attributes();
     }
 
     @Override

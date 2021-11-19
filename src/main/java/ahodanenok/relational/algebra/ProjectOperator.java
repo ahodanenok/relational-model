@@ -65,12 +65,13 @@ public final class ProjectOperator implements RelationalOperator {
     }
 
     private RelationSchema projectSchema() {
-        RelationSchemaGenerator resultSchemaGenerator = new RelationSchemaGenerator();
         Predicate<Attribute> predicate = a -> attributeNames.contains(a.getName());
         if (!included) {
             predicate = predicate.negate();
         }
-        relation.schema().getAttributes().stream()
+
+        RelationSchemaGenerator resultSchemaGenerator = new RelationSchemaGenerator();
+        relation.attributes()
                 .filter(predicate)
                 .forEach(resultSchemaGenerator::withAttribute);
 
@@ -79,9 +80,7 @@ public final class ProjectOperator implements RelationalOperator {
 
     private Tuple projectTuple(Tuple tuple, RelationSchema resultSchema) {
         TupleSelector tupleSelector = new TupleSelector();
-        for (Attribute a : resultSchema.getAttributes()) {
-            tupleSelector.withValue(a.getName(), tuple.getValue(a.getName()));
-        }
+        resultSchema.attributes().forEach(a -> tupleSelector.withValue(a.getName(), tuple.getValue(a.getName())));
 
         return tupleSelector.select();
     }

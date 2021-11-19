@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,7 +17,7 @@ public class RelationSchemaTest {
     public void shouldGenerateEmptySchema() {
         RelationSchema schema = new RelationSchemaGenerator().generate();
         assertEquals(0, schema.degree());
-        assertEquals(0, schema.getAttributes().size());
+        assertEquals(0, schema.attributes().count());
     }
 
     @Test
@@ -26,8 +27,8 @@ public class RelationSchemaTest {
                 .generate();
 
         assertEquals(1, schema.degree());
-        assertEquals(1, schema.getAttributes().size());
-        assertEquals(Collections.singleton(new Attribute("a", int.class)), schema.getAttributes());
+        assertEquals(1, schema.attributes().count());
+        assertEquals(Collections.singleton(new Attribute("a", int.class)), schema.attributes().collect(Collectors.toSet()));
         assertEquals(new Attribute("a", int.class), schema.getAttribute("a"));
     }
 
@@ -42,7 +43,7 @@ public class RelationSchemaTest {
                 .generate();
 
         assertEquals(5, schema.degree());
-        assertEquals(5, schema.getAttributes().size());
+        assertEquals(5, schema.attributes().count());
 
         assertEquals(new Attribute("a", int.class), schema.getAttribute("a"));
         assertEquals(new Attribute("b", String.class), schema.getAttribute("b"));
@@ -56,7 +57,7 @@ public class RelationSchemaTest {
         expectedAttributes.add(new Attribute("c", Byte.class));
         expectedAttributes.add(new Attribute("b", String.class));
         expectedAttributes.add(new Attribute("a", int.class));
-        assertEquals(expectedAttributes, schema.getAttributes());
+        assertEquals(expectedAttributes, schema.attributes().collect(Collectors.toSet()));
     }
 
     @Test

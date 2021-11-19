@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +17,7 @@ public class TupleSchemaTest {
     public void shouldGenerateSchemaWithoutAttributes() {
         TupleSchema schema = new TupleSchemaGenerator().generate();
         assertEquals(0, schema.degree());
-        assertEquals(0, schema.getAttributes().size());
+        assertEquals(0, schema.attributes().count());
     }
 
     @Test
@@ -26,8 +27,8 @@ public class TupleSchemaTest {
                 .generate();
 
         assertEquals(1, schema.degree());
-        assertEquals(1, schema.getAttributes().size());
-        assertEquals(Collections.singleton(new Attribute("a", int.class)), schema.getAttributes());
+        assertEquals(1, schema.attributes().count());
+        assertEquals(Collections.singleton(new Attribute("a", int.class)), schema.attributes().collect(Collectors.toSet()));
         assertTrue(schema.hasAttribute("a"));
         assertEquals(new Attribute("a", int.class), schema.getAttribute("a"));
     }
@@ -43,7 +44,7 @@ public class TupleSchemaTest {
                 .generate();
 
         assertEquals(5, schema.degree());
-        assertEquals(5, schema.getAttributes().size());
+        assertEquals(5, schema.attributes().count());
 
         assertTrue(schema.hasAttribute("a"));
         assertEquals(new Attribute("a", int.class), schema.getAttribute("a"));
@@ -66,7 +67,7 @@ public class TupleSchemaTest {
         expectedAttributes.add(new Attribute("c", Byte.class));
         expectedAttributes.add(new Attribute("b", String.class));
         expectedAttributes.add(new Attribute("a", int.class));
-        assertEquals(expectedAttributes, schema.getAttributes());
+        assertEquals(expectedAttributes, schema.attributes().collect(Collectors.toSet()));
     }
 
     @Test
@@ -78,12 +79,12 @@ public class TupleSchemaTest {
                 .generate();
 
         assertEquals(2, schema.degree());
-        assertEquals(2, schema.getAttributes().size());
+        assertEquals(2, schema.attributes().count());
 
         Set<Attribute> expectedAttributes = new HashSet<>();
         expectedAttributes.add(new Attribute("a", Long.class));
         expectedAttributes.add(new Attribute("b", Boolean.class));
-        assertEquals(expectedAttributes, schema.getAttributes());
+        assertEquals(expectedAttributes, schema.attributes().collect(Collectors.toSet()));
 
         assertTrue(schema.hasAttribute("a"));
         assertEquals(new Attribute("a", Long.class), schema.getAttribute("a"));
