@@ -2,6 +2,7 @@ package ahodanenok.relational.algebra;
 
 import ahodanenok.relational.*;
 import ahodanenok.relational.exception.AttributeNotFoundException;
+import ahodanenok.relational.expression.RelationalExpression;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -13,18 +14,18 @@ import java.util.function.Predicate;
  */
 public final class ProjectOperator implements RelationalOperator {
 
-    private final Relation relation;
+    private final RelationalExpression expr;
     private final Set<String> attributeNames;
     private boolean included = true;
 
-    public ProjectOperator(Relation relation, String... attributeNames) {
-        this(relation, Arrays.asList(attributeNames));
+    public ProjectOperator(RelationalExpression expr, String... attributeNames) {
+        this(expr, Arrays.asList(attributeNames));
     }
 
-    public ProjectOperator(Relation relation, List<String> attributeNames) {
-        Objects.requireNonNull(relation, "Relation can't be null");
+    public ProjectOperator(RelationalExpression expr, List<String> attributeNames) {
+        Objects.requireNonNull(expr, "Expression can't be null");
         Objects.requireNonNull(attributeNames, "Attribute names can't be null");
-        this.relation = relation;
+        this.expr = expr;
         this.attributeNames = new HashSet<>(attributeNames);
     }
 
@@ -46,6 +47,8 @@ public final class ProjectOperator implements RelationalOperator {
 
     @Override
     public Relation execute() {
+        Relation relation = expr.execute();
+
         if (attributeNames.isEmpty() && included) {
             return relation.isEmpty() ? Relation.NULLARY_EMPTY : Relation.NULLARY_TUPLE;
         }
@@ -57,14 +60,14 @@ public final class ProjectOperator implements RelationalOperator {
             }
         }
 
-        RelationSchema resultSchema = projectSchema();
+        RelationSchema resultSchema = projectSchema(relation);
         RelationSelector resultRelationSelector = new RelationSelector().withSchema(resultSchema);
         relation.tuples().map(t -> projectTuple(t, resultSchema)).forEach(resultRelationSelector::addTuple);
 
         return resultRelationSelector.select();
     }
 
-    private RelationSchema projectSchema() {
+    private RelationSchema projectSchema(Relation relation) {
         Predicate<Attribute> predicate = a -> attributeNames.contains(a.getName());
         if (!included) {
             predicate = predicate.negate();

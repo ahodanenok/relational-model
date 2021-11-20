@@ -3,6 +3,7 @@ package ahodanenok.relational.algebra;
 import ahodanenok.relational.*;
 import ahodanenok.relational.exception.AttributeNotFoundException;
 import ahodanenok.relational.exception.AttributeAlreadyExistsException;
+import ahodanenok.relational.expression.RelationalExpression;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,12 +17,12 @@ import java.util.Objects;
  */
 public final class RenameOperator implements RelationalOperator {
 
-    private final Relation relation;
+    private final RelationalExpression expr;
     private final Map<String, String> mappings;
 
-    public RenameOperator(Relation relation) {
-        Objects.requireNonNull(relation, "Relation can't be null");
-        this.relation = relation;
+    public RenameOperator(RelationalExpression expr) {
+        Objects.requireNonNull(expr, "Expression can't be null");
+        this.expr = expr;
         this.mappings = new HashMap<>();
     }
 
@@ -41,6 +42,7 @@ public final class RenameOperator implements RelationalOperator {
 
     @Override
     public Relation execute() {
+        Relation relation = expr.execute();
         if (mappings.isEmpty()) {
             return relation;
         }

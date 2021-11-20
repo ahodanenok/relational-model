@@ -3,6 +3,7 @@ package ahodanenok.relational;
 import ahodanenok.relational.algebra.RenameOperator;
 import ahodanenok.relational.exception.AttributeNotFoundException;
 import ahodanenok.relational.exception.AttributeAlreadyExistsException;
+import ahodanenok.relational.expression.IdentityExpression;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +16,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
-        Relation resultRelation = new RenameOperator(relation).execute();
+        Relation resultRelation = new RenameOperator(new IdentityExpression(relation)).execute();
         assertEquals(relation, resultRelation);
     }
 
@@ -25,7 +26,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
-        Relation resultRelation = new RenameOperator(relation).addMapping("a", "c").execute();
+        Relation resultRelation = new RenameOperator(new IdentityExpression(relation)).addMapping("a", "c").execute();
         Relation expectedRelation = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("c", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("c", 2).withValue("b", 22).select())
@@ -39,7 +40,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
-        Relation resultRelation = new RenameOperator(relation).addMapping("b", "!b!").addMapping("a", "_a_").execute();
+        Relation resultRelation = new RenameOperator(new IdentityExpression(relation)).addMapping("b", "!b!").addMapping("a", "_a_").execute();
         Relation expectedRelation = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("_a_", 1).withValue("!b!", 11).select())
                 .addTuple(new TupleSelector().withValue("_a_", 2).withValue("!b!", 22).select())
@@ -53,7 +54,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
-        Relation resultRelation = new RenameOperator(relation).addMapping("a", "b").addMapping("b", "a").execute();
+        Relation resultRelation = new RenameOperator(new IdentityExpression(relation)).addMapping("a", "b").addMapping("b", "a").execute();
         Relation expectedRelation = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("b", 1).withValue("a", 11).select())
                 .addTuple(new TupleSelector().withValue("b", 2).withValue("a", 22).select())
@@ -67,7 +68,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).withValue("c", 111).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).withValue("c", 222).select())
                 .select();
-        Relation resultRelation = new RenameOperator(relation).addMapping("a", "b").addMapping("b", "d").execute();
+        Relation resultRelation = new RenameOperator(new IdentityExpression(relation)).addMapping("a", "b").addMapping("b", "d").execute();
         Relation expectedRelation = new RelationSelector()
                 .addTuple(new TupleSelector().withValue("b", 1).withValue("d", 11).withValue("c", 111).select())
                 .addTuple(new TupleSelector().withValue("b", 2).withValue("d", 22).withValue("c", 222).select())
@@ -81,7 +82,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
-        RenameOperator op = new RenameOperator(relation).addMapping("c", "a");
+        RenameOperator op = new RenameOperator(new IdentityExpression(relation)).addMapping("c", "a");
         AttributeNotFoundException e = assertThrows(AttributeNotFoundException.class, op::execute);
         assertEquals("c", e.getName());
     }
@@ -93,7 +94,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
 
-        RenameOperator op = new RenameOperator(relation).addMapping("a", "b");
+        RenameOperator op = new RenameOperator(new IdentityExpression(relation)).addMapping("a", "b");
 
         AttributeAlreadyExistsException e = assertThrows(AttributeAlreadyExistsException.class, op::execute);
         assertEquals("Attribute 'b' already exists", e.getMessage());
@@ -106,7 +107,7 @@ public class RenameOperatorTest {
                 .addTuple(new TupleSelector().withValue("a", 1).withValue("b", 11).select())
                 .addTuple(new TupleSelector().withValue("a", 2).withValue("b", 22).select())
                 .select();
-        RenameOperator op = new RenameOperator(relation);
+        RenameOperator op = new RenameOperator(new IdentityExpression(relation));
 
         NullPointerException e1 = assertThrows(NullPointerException.class, () -> op.addMapping(null, "a"));
         assertEquals("Name can't be null", e1.getMessage());

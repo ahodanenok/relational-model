@@ -3,6 +3,7 @@ package ahodanenok.relational.algebra;
 import ahodanenok.relational.Relation;
 import ahodanenok.relational.RelationSelector;
 import ahodanenok.relational.exception.RelationSchemaMismatchException;
+import ahodanenok.relational.expression.RelationalExpression;
 
 import java.util.Objects;
 
@@ -14,18 +15,21 @@ import java.util.Objects;
  */
 public final class DifferenceOperator implements RelationalOperator {
 
-    private final Relation left;
-    private final Relation right;
+    private final RelationalExpression leftExpr;
+    private final RelationalExpression rightExpr;
 
-    public DifferenceOperator(Relation left, Relation right) {
-        Objects.requireNonNull(left, "Relation can't be null: left");
-        Objects.requireNonNull(right, "Relation can't be null: right");
-        this.left = left;
-        this.right = right;
+    public DifferenceOperator(RelationalExpression leftExpr, RelationalExpression rightExpr) {
+        Objects.requireNonNull(leftExpr, "Expression can't be null: left");
+        Objects.requireNonNull(rightExpr, "Expression can't be null: right");
+        this.leftExpr = leftExpr;
+        this.rightExpr = rightExpr;
     }
 
     @Override
     public Relation execute() {
+        Relation left = leftExpr.execute();
+        Relation right = rightExpr.execute();
+
         if (!left.schema().equals(right.schema())) {
             throw new RelationSchemaMismatchException(right, left.schema());
         }

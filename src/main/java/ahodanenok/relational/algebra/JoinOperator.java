@@ -1,6 +1,7 @@
 package ahodanenok.relational.algebra;
 
 import ahodanenok.relational.*;
+import ahodanenok.relational.expression.RelationalExpression;
 
 import java.util.Objects;
 import java.util.Set;
@@ -14,18 +15,21 @@ import java.util.stream.Collectors;
  */
 public final class JoinOperator implements RelationalOperator {
 
-    private final Relation left;
-    private final Relation right;
+    private final RelationalExpression leftExpr;
+    private final RelationalExpression rightExpr;
 
-    public JoinOperator(Relation left, Relation right) {
-        Objects.requireNonNull(left, "Relation can't be null: left");
-        Objects.requireNonNull(right, "Relation can't be null: right");
-        this.left = left;
-        this.right = right;
+    public JoinOperator(RelationalExpression leftExpr, RelationalExpression rightExpr) {
+        Objects.requireNonNull(leftExpr, "Expression can't be null: left");
+        Objects.requireNonNull(rightExpr, "Expression can't be null: right");
+        this.leftExpr = leftExpr;
+        this.rightExpr = rightExpr;
     }
 
     @Override
     public Relation execute() {
+        Relation left = leftExpr.execute();
+        Relation right = rightExpr.execute();
+
         RelationSchemaGenerator resultSchemaGenerator = new RelationSchemaGenerator();
         left.attributes().forEach(resultSchemaGenerator::withAttribute);
         right.attributes().forEach(resultSchemaGenerator::withAttribute);
